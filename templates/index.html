@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Cracking Simulation</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input, select, button { padding: 10px; margin: 10px; }
+        #result { margin-top: 20px; font-size: 20px; }
+    </style>
+</head>
+<body>
+
+    <h2>Password Cracking Simulation</h2>
+    <p>Enter a password and choose an attack method.</p>
+
+    <form id="crackForm">
+        <input type="text" id="password" name="password" placeholder="Enter Password" required>
+        <select id="attack_type" name="attack_type">
+            <option value="dictionary">Dictionary Attack</option>
+            <option value="brute-force">Brute-Force</option>
+            <option value="hybrid">Hybrid Attack</option>
+            <option value="rule-based">Rule-Based Attack</option>
+            <option value="mask">Mask Attack</option>
+            <option value="rainbow">Rainbow Table Attack</option>
+        </select>
+        <button type="submit">Crack Password</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        $("#crackForm").submit(function(event) {
+            event.preventDefault();
+            $.post("/crack", $(this).serialize(), function(response) {
+                $("#result").html(
+                    `<p><strong>Method:</strong> ${response.method}</p>
+                    <p><strong>Password Found:</strong> ${response.password}</p>
+                    <p><strong>Time Taken:</strong> ${response.time.toFixed(2)} sec</p>`
+                );
+            });
+        });
+    </script>
+
+</body>
+</html>
